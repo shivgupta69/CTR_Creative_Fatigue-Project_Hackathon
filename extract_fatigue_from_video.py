@@ -18,20 +18,20 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 cap = cv2.VideoCapture(VIDEO_PATH)
 
 if not cap.isOpened():
-    print(f"❌ Error: Could not open video file '{VIDEO_PATH}'. Check the name or path.")
+    print(f"Error: Could not open video file '{VIDEO_PATH}'. Check the name or path.")
     exit()
 
 fps = cap.get(cv2.CAP_PROP_FPS)
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 if fps == 0:
-    print("❌ Error: FPS is 0. Video metadata could not be read. Try using a different video.")
+    print(" Error: FPS is 0. Video metadata could not be read. Try using a different video.")
     cap.release()
     exit()
 
 duration_sec = int(total_frames / fps)
-print(f"✅ Video loaded: {VIDEO_PATH}")
-print(f"🎞️ Duration: {duration_sec}s, FPS: {fps}, Total Frames: {total_frames}")
+print(f"Video loaded: {VIDEO_PATH}")
+print(f" Duration: {duration_sec}s, FPS: {fps}, Total Frames: {total_frames}")
 
 # --- Frame Sampling & OCR ---
 text_outputs = []
@@ -40,7 +40,7 @@ for t in range(0, duration_sec, FRAME_INTERVAL):
     cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
     success, frame = cap.read()
     if not success:
-        print(f"⚠️ Could not read frame at {t}s.")
+        print(f" Could not read frame at {t}s.")
         continue
 
     frame_path = os.path.join(OUTPUT_DIR, f"frame_{t}.jpg")
@@ -73,7 +73,7 @@ with open(os.path.join(OUTPUT_DIR, "extracted_text.txt"), "w", encoding="utf-8")
 
 # --- Audio to Text ---
 print("
-🔊 Extracting Audio...")
+     Extracting Audio...")
 video = VideoFileClip(VIDEO_PATH)
 audio_path = os.path.join(OUTPUT_DIR, "audio.wav")
 video.audio.write_audiofile(audio_path, verbose=False, logger=None)
@@ -90,7 +90,7 @@ except sr.RequestError as e:
     audio_text = f"(Speech recognition failed: {e})"
 
 with open(os.path.join(OUTPUT_DIR, "transcribed_audio.txt"), "w", encoding="utf-8") as f:
-    f.write("🔊 Transcribed Audio Text:
+    f.write("Transcribed Audio Text:
 
 ")
     f.write(audio_text)
@@ -145,7 +145,7 @@ with open(os.path.join(OUTPUT_DIR, "fatigue_report.json"), "w", encoding="utf-8"
 
 # Save Human Dashboard
 with open(os.path.join(OUTPUT_DIR, "fatigue_dashboard.txt"), "w", encoding="utf-8") as f:
-    f.write("🎯 CREATIVE FATIGUE DASHBOARD
+    f.write(" CREATIVE FATIGUE DASHBOARD
 ")
     f.write("=" * 40 + "
 ")
@@ -154,17 +154,17 @@ with open(os.path.join(OUTPUT_DIR, "fatigue_dashboard.txt"), "w", encoding="utf-
     f.write(f"Fatigue Risk    : {fatigue_result['fatigue_risk']}
 
 ")
-    f.write("🔍 Reasons for Fatigue:
+    f.write(" Reasons for Fatigue:
 ")
     for r in fatigue_result['reasons']:
         f.write(f" - {r}
 ")
     f.write("
-💡 Recommended Actions:
+     Recommended Actions:
 ")
     for r in fatigue_result['recommendations']:
         f.write(f" - {r}
 ")
 
 print("
-✅ All processing complete. See output folder.")
+     All processing complete. See output folder.")
