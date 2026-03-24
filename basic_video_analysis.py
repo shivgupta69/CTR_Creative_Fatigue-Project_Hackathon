@@ -13,20 +13,20 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 cap = cv2.VideoCapture(VIDEO_PATH)
 
 if not cap.isOpened():
-    print(f"❌ Error: Could not open video file '{VIDEO_PATH}'.")
+    print(f" Error: Could not open video file '{VIDEO_PATH}'.")
     exit()
 
 fps = cap.get(cv2.CAP_PROP_FPS)
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 if fps == 0:
-    print("❌ Error: FPS is 0.")
+    print(" Error: FPS is 0.")
     cap.release()
     exit()
 
 duration_sec = int(total_frames / fps)
-print(f"✅ Video loaded: {VIDEO_PATH}")
-print(f"🎞️ Duration: {duration_sec}s, FPS: {fps}, Total Frames: {total_frames}")
+print(f" Video loaded: {VIDEO_PATH}")
+print(f" Duration: {duration_sec}s, FPS: {fps}, Total Frames: {total_frames}")
 
 # --- Frame Sampling & OCR ---
 text_outputs = []
@@ -35,7 +35,7 @@ for t in range(0, duration_sec, FRAME_INTERVAL):
     cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
     success, frame = cap.read()
     if not success:
-        print(f"⚠️ Could not read frame at {t}s.")
+        print(f"Could not read frame at {t}s.")
         continue
 
     frame_path = os.path.join(OUTPUT_DIR, f"frame_{t}.jpg")
@@ -53,12 +53,12 @@ for t in range(0, duration_sec, FRAME_INTERVAL):
 cap.release()
 
 print("
-🔍 Extracted Text from Video Frames:
+Extracted Text from Video Frames:
 ")
 for item in text_outputs:
     print(f"[Time: {item['timestamp_sec']}s]")
-    print("🖼️ Frame:", item["image"])
-    print("📝 Text:
+    print(" Frame:", item["image"])
+    print("Text:
 ", item["text"] or "(No text found)")
     print("-" * 40)
 
@@ -80,7 +80,7 @@ from moviepy.editor import VideoFileClip
 import speech_recognition as sr
 
 print("
-🔊 Extracting Audio for Speech-to-Text...")
+ Extracting Audio for Speech-to-Text...")
 
 video = VideoFileClip(VIDEO_PATH)
 audio_path = os.path.join(OUTPUT_DIR, "audio.wav")
@@ -98,9 +98,9 @@ except sr.RequestError as e:
     audio_text = f"(Speech recognition failed: {e})"
 
 with open(os.path.join(OUTPUT_DIR, "transcribed_audio.txt"), "w", encoding="utf-8") as f:
-    f.write("🔊 Transcribed Audio Text:
+    f.write("Transcribed Audio Text:
 
 ")
     f.write(audio_text)
 
-print("✅ Audio transcription complete!")
+print("Audio transcription complete!")
